@@ -7,6 +7,12 @@ import cmd
 import shlex
 import models
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -15,8 +21,11 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = '(hbnb) '
     
-    # specialized map of valid classes
-    valid_classes = ["BaseModel"]
+    # List of all valid classes
+    valid_classes = [
+        "BaseModel", "User", "State", "City", 
+        "Amenity", "Place", "Review"
+    ]
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
@@ -33,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """
-        Creates a new instance of BaseModel, saves it (to the JSON file)
+        Creates a new instance of a class, saves it (to the JSON file)
         and prints the id.
         Usage: create <class name>
         """
@@ -45,8 +54,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         
-        # Create and save the new instance
-        new_instance = BaseModel()
+        # Create instance dynamically
+        # We use eval() here because we have imported the classes
+        new_instance = eval(args[0])()
         new_instance.save()
         print(new_instance.id)
 
@@ -109,7 +119,6 @@ class HBNBCommand(cmd.Cmd):
             return
 
         for key, obj in models.storage.all().items():
-            # If no class name provided, or if class name matches
             if len(args) == 0 or args[0] == obj.__class__.__name__:
                 obj_list.append(str(obj))
         
@@ -148,15 +157,14 @@ class HBNBCommand(cmd.Cmd):
         attr_name = args[2]
         attr_value = args[3]
 
-        # Cast the value to the correct type (int, float, string)
-        # We try to cast to int, then float, otherwise keep as string
+        # Casting logic: Try int, then float, else string
         try:
             if "." in attr_value:
                 attr_value = float(attr_value)
             else:
                 attr_value = int(attr_value)
         except ValueError:
-            pass  # Keep as string
+            pass 
 
         setattr(obj, attr_name, attr_value)
         obj.save()
