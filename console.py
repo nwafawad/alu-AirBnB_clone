@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """Do nothing when an empty line is entered"""
+        """Do nothing when an empty line is  entered"""
         pass
 
 
