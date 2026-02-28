@@ -1,14 +1,10 @@
 #!/usr/bin/python3
-"""
-Module city
-Defines the City class
-"""
+
 from models.base_model import BaseModel
 
 
 class City(BaseModel):
-    """
-    City class inherits from BaseModel
-    """
-    state_id = ""
+    """City class that will be used to represent a city"""
+
+    state_id = ""  # it will be the state.id
     name = ""

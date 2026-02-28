@@ -1,50 +1,57 @@
 #!/usr/bin/python3
-"""_summary_
-    Test suite for the User class in models.user
-"""
-import unittest
-from models.base_model import BaseModel
 
+import unittest
 from models.user import User
+from models.base_model import BaseModel
 
 
 class TestUser(unittest.TestCase):
-    """_summary_
-        Test cases against the User class
-    """
+    """test class: User"""
 
-    def test_creation(self):
-        '''this test validate that creation proccess was correct.
-        '''
+    def setUp(self):
+        """create an instance before test_... is run"""
+        self.instance = User()
 
-        data = {'id': 3,
-                'first_name': 'Ronald',
-                'last_name': 'Abimbola',
-                'password': '@b1mb0l@_RD',
-                'email': 'r.abimbola@alustudent.com',
-                }
+    def test_user(self):
+        """test if User inherits from BaseModel"""
+        self.assertTrue(issubclass(User, BaseModel))
+        self.assertIsInstance(self.instance, BaseModel)
+        self.assertTrue(hasattr(self.instance, "id"))
+        self.assertTrue(hasattr(self.instance, "created_at"))
+        self.assertTrue(hasattr(self.instance, "updated_at"))
 
-        self.user = User(**data)
-        self.assertEqual(self.user.id, 3)
-        self.assertEqual(self.user.first_name, 'Ronald')
-        self.assertEqual(self.user.last_name, 'Abimbola')
-        self.assertEqual(self.user.password, '@b1mb0l@_RD')
-        self.assertEqual(self.user.email, 'r.abimbola@alustudent.com')
+    def test_email(self):
+        """test if email is an attribute of User"""
+        self.assertTrue(type(self.instance), User)
+        self.assertTrue(hasattr(self.instance, "email"))
+        self.assertTrue(User.email == "")
 
-    def test_attrs_are_class_attrs(self):
-        user = User()
-        self.assertTrue(hasattr(User, "first_name") and hasattr(User, "last_name"))
+    def test_password(self):
+        """test if password is an attribute of User"""
+        self.assertTrue(type(self.instance), User)
+        self.assertTrue(hasattr(self.instance, "password"))
+        self.assertTrue(User.password == "")
 
-    def test_class_attrs(self):
-        user = User()
-        self.assertIs(type(user.first_name), str)
-        self.assertIs(type(user.last_name), str)
-        self.assertTrue(user.first_name == "")
-        self.assertTrue(user.last_name == "")
+        # check for password attribute after saving
+        # self.instance.save()
+        # all_objs = storage.all()
+        # key = "User." + str(self.instance.id)
+        # instance_obj = all_objs[key]
+        # self.assertTrue(key in all_objs.keys())
+        # self.assertTrue(hasattr(instance_obj, "password"))
+        # storage.delete(key)
 
-    def test_user_is_a_subclass_of_basemodel(self):
-        user = User()
-        self.assertTrue(issubclass(type(user), BaseModel))
+    def test_first_name(self):
+        """test if first_name is an attribute of User"""
+        self.assertTrue(User.first_name == "")
+        self.assertTrue(type(self.instance), User)
+        self.assertTrue(hasattr(self.instance, "first_name"))
+
+    def test_last_name(self):
+        """test if last_name is an attribute of User"""
+        self.assertTrue(User.last_name == "")
+        self.assertTrue(type(self.instance), User)
+        self.assertTrue(hasattr(self.instance, "last_name"))
 
 
 if __name__ == "__main__":

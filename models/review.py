@@ -1,15 +1,15 @@
 #!/usr/bin/python3
-"""
-Module review
-Defines the Review class
-"""
+
 from models.base_model import BaseModel
 
 
 class Review(BaseModel):
+    """Review class for customer reviews
+
+    Args:
+        BaseModel (BaseModel): Parent class
     """
-    Review class inherits from BaseModel
-    """
-    place_id = ""
-    user_id = ""
+
+    place_id = ""  # it will be the Place.id
+    user_id = ""  # it will be the User.id
     text = ""
