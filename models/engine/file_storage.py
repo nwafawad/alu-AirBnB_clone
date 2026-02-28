@@ -1,66 +1,68 @@
 #!/usr/bin/python3
-"""
-Module file_storage
-Defines the FileStorage class for serializing and deserializing instances.
-"""
 import json
-import os
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+
+
+classes = {
+    "BaseModel": BaseModel,
+    "User": User,
+    "State": State,
+    "City": City,
+    "Amenity": Amenity,
+    "Place": Place,
+    "Review": Review,
+}
 
 
 class FileStorage:
-    """
-    Serializes instances to a JSON file and deserializes JSON file to instances.
-    """
+    ...
+
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        """Returns the dictionary __objects."""
-        return FileStorage.__objects
+        """returns the dictionary __objects"""
+        return self.__objects
 
     def new(self, obj):
-        """Sets in __objects the obj with key <obj class name>.id."""
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        FileStorage.__objects[key] = obj
+        """sets in __objects the obj with key <obj class name>.id"""
+        key = f'{obj.to_dict()["__class__"]}.{obj.to_dict()["id"]}'
+        self.__objects[key] = obj
 
     def save(self):
-        """Serializes __objects to the JSON file (path: __file_path)."""
-        new_dict = {}
-        for key, value in FileStorage.__objects.items():
-            new_dict[key] = value.to_dict()
-        
-        with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
-            json.dump(new_dict, f)
+        """serializes __objects to the JSON file (path: __file_path)"""
+        json_objects = {}
+        for key in self.__objects.keys():
+            json_objects[key] = self.__objects[key].to_dict()
+        with open(self.__file_path, "w") as file:
+            json.dump(json_objects, file)
 
     def reload(self):
-        """Deserializes the JSON file to __objects."""
-        if os.path.exists(FileStorage.__file_path):
-            try:
-                with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
-                    obj_dict = json.load(f)
-                
-                # Import all classes here to avoid circular imports
-                from models.base_model import BaseModel
-                from models.user import User
-                from models.state import State
-                from models.city import City
-                from models.amenity import Amenity
-                from models.place import Place
-                from models.review import Review
-                
-                classes = {
-                    "BaseModel": BaseModel,
-                    "User": User,
-                    "State": State,
-                    "City": City,
-                    "Amenity": Amenity,
-                    "Place": Place,
-                    "Review": Review
-                }
+        """deserializes the JSON file to __objects"""
+        try:
+            with open(self.__file_path, "r") as file:
+                obj_dict = json.load(file)
+                # from models.base_model import BaseModel
+                # from models.user import User
+                for key in obj_dict:
+                    self.__objects[key] = classes[obj_dict[key]["__class__"]](
+                        **obj_dict[key]
+                    )
+                # for key in obj_dict:
+                #     if str(key).startswith("BaseModel"):
+                #         self.__objects[key] = BaseModel(**obj_dict[key])
+                #     elif str(key).startswith("User"):
+                #         self.__objects[key] = User(**obj_dict[key])
+        except FileNotFoundError:
+            pass
 
-                for key, value in obj_dict.items():
-                    class_name = value["__class__"]
-                    if class_name in classes:
-                        self.new(classes[class_name](**value))
-            except Exception:
-                pass
+    def delete(self, key):
+        """delete an instance and save changes to json file"""
+        self.__objects.__delitem__(key)
+        self.save()

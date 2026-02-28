@@ -1,48 +1,30 @@
 #!/usr/bin/python3
-"""
-    Test suite for the Amenity class present in models.amenity
-"""
+
 import unittest
 from models.amenity import Amenity
 from models.base_model import BaseModel
 
 
-
 class TestAmenity(unittest.TestCase):
-    """_summary_
-        This test_class tests the Amenity module present in models.
-    """
+    """test class: Amenity"""
 
     def setUp(self):
-        """_summary_
-            This is the setUp method for the test in this module.
-        """
-        self.amenity = Amenity()
+        """create an instance before test_... is run"""
+        self.instance = Amenity()
 
-    def test_creation(self):
-        """_summary_
-            This test validates that creation proccess was correct.
-        """
-        self.assertEqual(self.amenity.name, '')
-    
-    def test_amenity_is_a_subclass_of_basemodel(self):
-        """_summary_
-            This test validates that amenity is a subclass of basemodel.
-        """
-        self.assertTrue(issubclass(type(self.amenity), BaseModel))
+    def test_Amenity(self):
+        """test if Amenity inherits from BaseModel"""
+        self.assertTrue(issubclass(Amenity, BaseModel))
+        self.assertIsInstance(self.instance, BaseModel)
+        self.assertTrue(hasattr(self.instance, "id"))
+        self.assertTrue(hasattr(self.instance, "created_at"))
+        self.assertTrue(hasattr(self.instance, "updated_at"))
 
-    def test_attr_is_a_class_attr(self):
-        """_summary_
-            This test validates that amenity has an attribute of name.
-        """
-        self.assertTrue(hasattr(self.amenity, "name"))
-
-    def test_class_attr(self):
-        """_summary_
-            This test validates that name is a string
-        """
-        self.assertIs(type(self.amenity.name), str)
-        self.assertFalse(bool(getattr(self.amenity, "name")))
+    def test_name(self):
+        """test if name is an attribute of Amenity"""
+        self.assertTrue(type(self.instance), Amenity)
+        self.assertTrue(hasattr(self.instance, "name"))
+        self.assertTrue(Amenity.name == "")
 
 
 if __name__ == "__main__":

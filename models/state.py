@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-"""
-Module state
-Defines the State class
-"""
+
 from models.base_model import BaseModel
 
 
 class State(BaseModel):
+    """State: estate location
+
+    Args:
+        BaseModel (BaseModel): Parent class
     """
-    State class inherits from BaseModel
-    """
+
     name = ""

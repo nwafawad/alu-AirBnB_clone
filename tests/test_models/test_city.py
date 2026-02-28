@@ -1,32 +1,36 @@
-#!/usr/bin/env python3
-"""
-    This module test the City class.
-"""
+#!/usr/bin/python3
+
 import unittest
 from models.city import City
 from models.base_model import BaseModel
 
 
 class TestCity(unittest.TestCase):
-    """_summary_
-        This class test City class present in models.
-    """
+    """test class: City"""
 
     def setUp(self):
-        self.city = City()
-        self.attr_list = ["state_id", "name"]
+        """create an instance before test_... is run"""
+        self.instance = City()
 
-    def test_creation(self):
-        '''_summary_
-            This test validate that creation proccess was correct.
-        '''
-        self.assertEqual(self.city.name, '')
-    
-    def test_city_is_a_subclass_of_basemodel(self):
-        '''_summary_
-            This test validate that City is a subclass of basemodel
-        '''
-        self.assertTrue(issubclass(type(self.city), BaseModel))
+    def test_City(self):
+        """test if City inherits from BaseModel"""
+        self.assertTrue(issubclass(City, BaseModel))
+        self.assertIsInstance(self.instance, BaseModel)
+        self.assertTrue(hasattr(self.instance, "id"))
+        self.assertTrue(hasattr(self.instance, "created_at"))
+        self.assertTrue(hasattr(self.instance, "updated_at"))
+
+    def test_name(self):
+        """test if name is an attribute of City"""
+        self.assertTrue(type(self.instance), City)
+        self.assertTrue(hasattr(self.instance, "name"))
+        self.assertTrue(City.name == "")
+
+    def test_state_id(self):
+        """test if state_id is an attribute of City"""
+        self.assertTrue(type(self.instance), City)
+        self.assertTrue(hasattr(self.instance, "state_id"))
+        self.assertTrue(City.state_id == "")
 
 
 if __name__ == "__main__":
